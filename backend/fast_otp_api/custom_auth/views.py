@@ -24,7 +24,7 @@ def send_otp(request):
 def verify_otp(request):
     if is_verified(request.data):
         return Response({"message": "verification is successfull"})
-    return Response({"error": "verification failed"})
+    return Response({"error": "verification failed"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 class UserGenericView(generics.ListAPIView):

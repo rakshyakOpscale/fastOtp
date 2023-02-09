@@ -15,10 +15,12 @@ class VerifyOtp(HttpRequest):
 # ///////////////////methods////////////////////////////
 def generte_otp(phone_number: str) -> str:
     """creates entry in the database and return otp_code"""
-    instance = Otp.objects.create(
-        phone_number=phone_number, otp_code=random.randint(10000, 99999)
+    instance, is_created = Otp.objects.update_or_create(
+        defaults={
+            "otp_code": random.randint(10000, 99999),
+        },
+        phone_number=phone_number,
     )
-    instance.save()
     return instance.otp_code
 
 
