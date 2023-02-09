@@ -35,9 +35,9 @@ def is_verified(data: VerifyOtp) -> bool:
         raise ValueError("data is not instance of HttpRequest")
     otp = Otp.objects.get(phone_number=data.get("phone_number"))
     if data.get("otp_code") == otp.otp_code:
-        user: User = User.objects.get(phone_number=data.get("phone_number"))
-        user.is_verified = True
-        user.save()
+        User.objects.update_or_create(
+            defaults={"is_verified": True}, phone_number=data.get("phone_number")
+        )
         otp.delete()
         return True
     else:
