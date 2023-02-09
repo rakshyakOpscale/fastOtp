@@ -40,6 +40,8 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    # TODO:Add user permission
+
     class Meta:
         abstract = True
 
