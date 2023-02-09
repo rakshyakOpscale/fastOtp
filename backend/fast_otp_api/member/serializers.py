@@ -6,16 +6,16 @@ from .models import App, Config, Contact
 class AppSerializer(ModelSerializer):
     class Meta:
         model = App
-        fields = ["display_name", "label"]
-
-
-class ConfigSerializer(ModelSerializer):
-    class Meta:
-        model = Config
-        fields = ["contact", "selected_apps", "set_duration"]
+        fields = ["display_name", "label", "package_name"]
 
 
 class ContactSerializer(ModelSerializer):
     class Meta:
         model = Contact
         fields = ["phone_number", "label", "first_name", "last_name"]
+
+
+class ConfigSerializer(serializers.Serializer):
+    contact = serializers.StringRelatedField()
+    selected_apps = AppSerializer(many=True)
+    set_duration = serializers.TimeField()
