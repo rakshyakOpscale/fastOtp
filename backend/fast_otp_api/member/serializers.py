@@ -6,13 +6,13 @@ from .models import App, Config, Contact
 class AppSerializer(ModelSerializer):
     class Meta:
         model = App
-        fields = ["display_name", "label", "package_name"]
+        fields = ["id","display_name", "label", "package_name"]
 
 
 class ContactSerializer(ModelSerializer):
     class Meta:
         model = Contact
-        fields = ["phone_number", "label", "first_name", "last_name"]
+        fields = ["id","phone_number", "label", "first_name", "last_name"]
 
 
 class ConfigSerializer(serializers.Serializer):
