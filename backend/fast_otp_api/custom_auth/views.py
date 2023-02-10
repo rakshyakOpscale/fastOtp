@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics, status
+from rest_framework import generics, status as restStatus
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from .models import User, Otp
 from .serializers import UserSerializer, OTPSerializer
 from .helper import generte_otp, is_verified
+from .helper import SMSVerification
 import random
 
 # Create your views here.
@@ -16,15 +17,27 @@ import random
 def send_otp(request):
     if not request.data.get("phone_number"):
         return Response({"phone_number": ["This field is required"]})
-    otp_code = generte_otp(request.data.get("phone_number"))
-    return Response({"otp_code": otp_code})
+    # otp_code = generte_otp(request.data.get("phone_number"))
+    smsVerification = SMSVerification()
+    status = smsVerification.send_otp(request.data.get("phone_number"))
+    return Response({"message": "otp sent to your phone number", "status": status})
 
 
 @api_view(["POST"])
 def verify_otp(request):
-    if is_verified(request.data):
-        return Response({"message": "verification is successfull"})
-    return Response({"error": "verification failed"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+    smsVerification = SMSVerification()
+    status = smsVerification.verification_check(
+        request.data.get("phone_number"), request.data.get("otp_code")
+    )
+    if status is False:
+        return Response(
+            {
+                "error": f"Otp did not match for phone number {request.data.get('phone_number')}",
+                "status": "pending",
+            },
+            status=restStatus.HTTP_400_BAD_REQUEST,
+        )
+    return Response({"message": f"phone number {request.data.get('phone_number')} is verified","status": "approved"}, status=restStatus.HTTP_200_OK)
 
 
 class UserGenericView(generics.ListAPIView):
