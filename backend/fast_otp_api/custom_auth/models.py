@@ -60,6 +60,7 @@ class Otp(models.Model):
     otp_code = models.CharField(max_length=5)
     generated_time = models.TimeField(auto_now=True)
     expire_time = models.TimeField(blank=True, null=True)
+    country_code = models.CharField(max_length=2, default="91")
     phone_number = models.CharField(max_length=10) 
 
     def __str__(self) -> str:
