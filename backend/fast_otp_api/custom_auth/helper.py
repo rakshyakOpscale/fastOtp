@@ -36,7 +36,8 @@ def is_verified(data: VerifyOtp) -> bool:
     otp = Otp.objects.get(phone_number=data.get("phone_number"))
     if data.get("otp_code") == otp.otp_code:
         User.objects.update_or_create(
-            defaults={"is_verified": True}, phone_number=data.get("phone_number")
+            defaults={"is_verified": True, "is_staff": True},
+            phone_number=data.get("phone_number"),
         )
         otp.delete()
         return True
