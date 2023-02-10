@@ -13,15 +13,9 @@ class SMSVerification:
     """A sms wrapper class to use 3rd parth sms service"""
 
     def __init__(self) -> None:
-        self.__account_sid = (
-            os.environ.get("TWILLO_SID") or "ACf3938be855012233c39a7c41392b63c9"
-        )
-        self.__auth_token = (
-            os.environ.get("TWILLO_AUTH_TOKEN") or "d691ce77dcfdacb37abe8ecb4b7552b4"
-        )
-        self.__verify_sid = (
-            os.environ.get("TWILLO_VERIFY_SID") or "VA1834fecbaadffe551b3324f37bbc27d4"
-        )
+        self.__account_sid = os.environ.get("TWILIO_SID")
+        self.__auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
+        self.__verify_sid = os.environ.get("TWILIO_VERIFY_SID")
 
         self.__client = Client(self.__account_sid, self.__auth_token)
         pass
