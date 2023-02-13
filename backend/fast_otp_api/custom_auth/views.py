@@ -12,6 +12,8 @@ from .serializers import UserSerializer
 from .helper import generte_otp, is_verified
 from .helper import SMSVerification
 
+from user.models import Profile
+
 # Create your views here.
 import os
 
@@ -46,10 +48,14 @@ def verify_otp_create_user(request):
             status=restStatus.HTTP_400_BAD_REQUEST,
         )
     else:
-        user, _ = User.objects.update_or_create(
+        user, is_created = User.objects.update_or_create(
             defaults={"is_verified": True, "is_staff": True},
             phone_number=request.data.get("phone_number"),
         )
+        if is_created is True:
+            profile = Profile.objects.create(user_id=user)
+            profile.save()
+
         refresh: RefreshToken = RefreshToken.for_user(user)
         return Response(
             {"refresh": str(refresh), "access": str(refresh.access_token)},

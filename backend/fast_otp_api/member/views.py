@@ -6,7 +6,12 @@ from .serializers import ConfigSerializer, ContactSerializer, AppSerializer
 # Create your views here.
 
 
-class ConfigView(ListAPIView):
+class ConfigView(CreateAPIView):
+    queryset = Config.objects.all()
+    serializer_class = ConfigSerializer
+
+
+class ConfigViewUpdate(RetrieveUpdateAPIView):
     queryset = Config.objects.all()
     serializer_class = ConfigSerializer
 
@@ -21,6 +26,11 @@ class AppViewUpdate(RetrieveUpdateAPIView):
     serializer_class = AppSerializer
 
 
-class ContactView(ListAPIView):
+class ContactViewUpdate(RetrieveUpdateAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+
+
+class ContactView(CreateAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer

@@ -10,7 +10,7 @@ from django.contrib.auth.models import (
 class UserManager(BaseUserManager):
     def _create(self, phone_number, password, **extra):
         user = self.model(phone_number=phone_number, **extra)
-        if password in None:
+        if password is None:
             password = self.make_random_password()
         user.set_password(password)
         user.save()
@@ -53,7 +53,6 @@ class User(BaseUser):
     is_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = "phone_number"
-    REQUIRED_FIELDS = ["otp"]
 
     def __str__(self) -> str:
         return self.phone_number
