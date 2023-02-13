@@ -4,9 +4,10 @@ from django.conf import settings
 from rest_framework import generics, status as restStatus
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # relative path
-from .models import User
+from .models import User, Otp
 from .serializers import UserSerializer
 from .helper import generte_otp, is_verified
 from .helper import SMSVerification
@@ -17,6 +18,7 @@ import os
 
 @api_view(["POST"])
 def send_otp(request):
+    """Send opt using Phone verification service"""
     if not request.data.get("phone_number"):
         return Response(
             {"phone_number": ["This field is required"]},
@@ -29,7 +31,8 @@ def send_otp(request):
 
 
 @api_view(["POST"])
-def verify_otp(request):
+def verify_otp_create_user(request):
+    """verify phone number with otp send through Phone verification service"""
     smsVerification = SMSVerification()
     status = smsVerification.verification_check(
         request.data.get("phone_number"), request.data.get("otp_code")
@@ -43,19 +46,17 @@ def verify_otp(request):
             status=restStatus.HTTP_400_BAD_REQUEST,
         )
     else:
-        User.objects.update_or_create(
+        user, _ = User.objects.update_or_create(
             defaults={"is_verified": True, "is_staff": True},
             phone_number=request.data.get("phone_number"),
         )
+        refresh: RefreshToken = RefreshToken.for_user(user)
         return Response(
-            {
-                "message": f"phone number {request.data.get('phone_number')} is verified",
-                "status": "approved",
-            },
+            {"refresh": str(refresh), "access": str(refresh.access_token)},
             status=restStatus.HTTP_200_OK,
         )
 
 
-class UserGenericView(generics.ListAPIView):
+class UserGenericView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
