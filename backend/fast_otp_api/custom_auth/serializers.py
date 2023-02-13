@@ -6,7 +6,7 @@ from .models import User, Otp
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["phone_number"]
+        fields = ["id","phone_number"]
 
 
 class OTPSerializer(serializers.ModelSerializer):
