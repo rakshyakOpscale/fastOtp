@@ -9,7 +9,7 @@ class App(models.Model):
     label = models.CharField(max_length=120)
 
     def __str__(self) -> str:
-        return self.label
+        return f"{self.display_name} {self.label}"
 
 
 class Contact(models.Model):

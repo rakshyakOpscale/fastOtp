@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
 from .models import Config, Contact, App
 from .serializers import ConfigSerializer, ContactSerializer, AppSerializer
 
@@ -11,7 +11,12 @@ class ConfigView(ListAPIView):
     serializer_class = ConfigSerializer
 
 
-class AppView(ListAPIView):
+class AppView(CreateAPIView):
+    queryset = App.objects.all()
+    serializer_class = AppSerializer
+
+
+class AppViewUpdate(RetrieveUpdateAPIView):
     queryset = App.objects.all()
     serializer_class = AppSerializer
 
