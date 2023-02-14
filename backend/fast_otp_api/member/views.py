@@ -1,36 +1,46 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import (
+    RetrieveUpdateAPIView,
+)
+from rest_framework.viewsets import ModelViewSet
+
 from .models import Config, Contact, App
-from .serializers import ConfigSerializer, ContactSerializer, AppSerializer
+from .serializers import (
+    ConfigSerializer,
+    ContactSerializer,
+    AppSerializer,
+    AppListSerializer,
+)
 
 # Create your views here.
 
 
-class ConfigView(CreateAPIView):
+class ConfigViewSet(ModelViewSet):
     queryset = Config.objects.all()
     serializer_class = ConfigSerializer
 
 
-class ConfigViewUpdate(RetrieveUpdateAPIView):
+class ConfigDetailViewset(ModelViewSet):
     queryset = Config.objects.all()
     serializer_class = ConfigSerializer
 
 
-class AppView(CreateAPIView):
+class AppDetailViewSet(ModelViewSet):
     queryset = App.objects.all()
     serializer_class = AppSerializer
 
 
-class AppViewUpdate(RetrieveUpdateAPIView):
+class AppViewSet(ModelViewSet):
     queryset = App.objects.all()
     serializer_class = AppSerializer
+    list_serializer_class = AppListSerializer
 
 
-class ContactViewUpdate(RetrieveUpdateAPIView):
+class ContactDetailViewSet(ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
 
 
-class ContactView(CreateAPIView):
+class ContactViewSet(ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer

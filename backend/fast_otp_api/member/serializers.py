@@ -3,13 +3,20 @@ from rest_framework import serializers
 
 from .models import App, Config, Contact
 
-from user.models import Profile
-
 # create serializers here
 class AppSerializer(ModelSerializer):
     class Meta:
         model = App
-        fields = ["id", "display_name", "label", "package_name"]
+        # fields = ["id", "display_name", "label", "package_name"]
+        fields = "__all__"
+
+
+class AppListSerializer(serializers.ListSerializer):
+    child = AppSerializer()
+
+    def create(self, validated_data):
+        instance = [App(**attrs) for attrs in validated_data]
+        return App.objects.bulk_create(instance)
 
 
 class ContactSerializer(ModelSerializer):

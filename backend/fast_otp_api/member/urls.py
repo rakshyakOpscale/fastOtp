@@ -1,18 +1,41 @@
 from django.urls import path
 from .views import (
-    AppView,
-    AppViewUpdate,
-    ConfigView,
-    ConfigViewUpdate,
-    ContactView,
-    ContactViewUpdate,
+    AppViewSet,
+    ConfigViewSet,
+    ContactViewSet,
+    AppDetailViewSet,
+    ConfigDetailViewset,
+    ContactDetailViewSet,
 )
 
 urlpatterns = [
-    path("config/", ConfigView.as_view()),
-    path("config/update/<int:pk>/", ConfigViewUpdate.as_view()),
-    path("contact/create/", ContactView.as_view()),
-    path("contact/update/<int:pk>/", ContactViewUpdate.as_view()),
-    path("app/create/", AppView.as_view()),
-    path("app/update/<int:pk>/", AppViewUpdate.as_view()),
+    path("config/", ConfigViewSet.as_view({"get": "list", "post": "create"})),
+    path(
+        "config/detail/<int:pk>/",
+        ConfigDetailViewset.as_view(
+            {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
+        ),
+    ),
+    path("contact/", ContactViewSet.as_view({"get": "list", "post": "create"})),
+    path(
+        "contact/detail/<int:pk>/",
+        ContactDetailViewSet.as_view(
+            {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
+        ),
+    ),
+    path(
+        "app/",
+        AppViewSet.as_view(
+            {
+                "get": "list",
+                "post": "create",
+            }
+        ),
+    ),
+    path(
+        "app/detail/<int:pk>/",
+        AppDetailViewSet.as_view(
+            {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
+        ),
+    ),
 ]

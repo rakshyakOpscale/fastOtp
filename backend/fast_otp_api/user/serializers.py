@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Profile
-
+from member.serializers import ConfigSerializer
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +11,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "user_id",
-            "member_config",
         ]
+    # user_id = serializers.StringRelatedField()
     user_id = serializers.StringRelatedField()
-    member_config = serializers.StringRelatedField()

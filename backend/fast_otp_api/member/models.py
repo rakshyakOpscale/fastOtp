@@ -25,9 +25,9 @@ class Contact(models.Model):
 
 
 class Config(models.Model):
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile_id = models.ForeignKey(Profile, on_delete=models.PROTECT)
     choice = (("2h", "2 hours"), ("to", "today"), ("tm", "tomarrow"), ("al", "always"))
-    contact = models.OneToOneField(Contact, on_delete=models.CASCADE, unique=True)
+    contact = models.OneToOneField(Contact, on_delete=models.PROTECT, unique=True)
     selected_apps = models.ManyToManyField(App)
     # share_otp_for = models.CharField()
     set_duration = models.CharField(max_length=2, choices=choice, default="2h")
