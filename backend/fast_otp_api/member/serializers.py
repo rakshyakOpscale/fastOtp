@@ -28,4 +28,7 @@ class ContactSerializer(ModelSerializer):
 class ConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = Config
-        fields = "__all__"
+        fields = ["id", "set_duration", "profile_id", "contact", "selected_apps"]
+
+    contact = ContactSerializer()
+    selected_apps = AppListSerializer()
