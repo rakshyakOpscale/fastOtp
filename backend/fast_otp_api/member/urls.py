@@ -3,6 +3,7 @@ from .views import (
     AppViewSet,
     ConfigViewSet,
     ContactViewSet,
+    ConfigAddMoreAppViewSet,
     AppDetailViewSet,
     ConfigDetailViewset,
     ContactDetailViewSet,
@@ -16,6 +17,7 @@ urlpatterns = [
             {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
         ),
     ),
+    path("config/add-more/<pk>", ConfigAddMoreAppViewSet.as_view({"get": "retrieve", "patch": "partial_update"})),
     path("contact/", ContactViewSet.as_view({"get": "list", "post": "create"})),
     path(
         "contact/detail/<int:pk>/",

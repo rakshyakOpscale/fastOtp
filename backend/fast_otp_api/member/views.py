@@ -7,6 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import Config, Contact, App
 from .serializers import (
     ConfigSerializer,
+    ConfigAddMoreAppSerializer,
     ContactSerializer,
     AppSerializer,
     AppListSerializer,
@@ -23,6 +24,10 @@ class ConfigViewSet(ModelViewSet):
 class ConfigDetailViewset(ModelViewSet):
     queryset = Config.objects.all()
     serializer_class = ConfigSerializer
+
+class ConfigAddMoreAppViewSet(ModelViewSet):
+    queryset = Config.objects.all()
+    serializer_class = ConfigAddMoreAppSerializer
 
 
 class AppDetailViewSet(ModelViewSet):

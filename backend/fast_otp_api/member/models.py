@@ -25,7 +25,7 @@ class Contact(models.Model):
 
 
 class Config(models.Model):
-    profile_id = models.ForeignKey(Profile, on_delete=models.PROTECT)
+    profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
     choice = (("2h", "2 hours"), ("to", "today"), ("tm", "tomarrow"), ("al", "always"))
     contact = models.OneToOneField(Contact, on_delete=models.PROTECT, unique=True)
     selected_apps = models.ManyToManyField(App)
@@ -35,4 +35,4 @@ class Config(models.Model):
     last_update = models.DateField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return self.profile_id.user_id.phone_number
+        return self.profile.user_id.phone_number
