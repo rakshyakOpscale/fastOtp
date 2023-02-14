@@ -27,7 +27,7 @@ class Contact(models.Model):
 class Config(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
     choice = (("2h", "2 hours"), ("to", "today"), ("tm", "tomarrow"), ("al", "always"))
-    contact = models.OneToOneField(Contact, on_delete=models.PROTECT, unique=True)
+    contact = models.ManyToManyField(Contact)
     selected_apps = models.ManyToManyField(App)
     # share_otp_for = models.CharField()
     set_duration = models.CharField(max_length=2, choices=choice, default="2h")
@@ -36,3 +36,11 @@ class Config(models.Model):
 
     def __str__(self) -> str:
         return self.profile.user_id.phone_number
+
+
+class OtpTimeline(models.Model):
+    method = models.CharField(max_length=1, choices=(("1", "sent"), ("0", "receive")))
+    contact = models.ForeignKey(Contact, on_delete=models.PROTECT)
+    sent_date = models.DateTimeField(auto_now=True)
+    update_data = models.DateTimeField(auto_now_add=True)
+    provider = models.CharField(max_length=120)

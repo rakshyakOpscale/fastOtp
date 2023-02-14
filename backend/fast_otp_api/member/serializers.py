@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 
-from .models import App, Config, Contact
+from .models import App, Config, Contact, OtpTimeline
 
 # create serializers here
 class AppSerializer(ModelSerializer):
@@ -32,9 +32,15 @@ class ConfigSerializer(serializers.ModelSerializer):
 
     # contact = ContactSerializer()
     # selected_apps = AppListSerializer()
-    
+
 class ConfigAddMoreAppSerializer(serializers.ModelSerializer):
     class Meta:
         model = Config
         fields = ["id", "set_duration","profile","contact","selected_apps"]
         read_only_fields = ["contact", "profile", "set_duration"]
+
+
+class OTPTimelineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OtpTimeline
+        fields = "__all__"

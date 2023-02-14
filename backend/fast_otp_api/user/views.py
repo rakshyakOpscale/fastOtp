@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from rest_framework.generics import RetrieveAPIView
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Profile
 from .serializers import ProfileSerializer

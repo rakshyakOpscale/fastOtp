@@ -4,16 +4,14 @@ from .views import (
     ConfigViewSet,
     ContactViewSet,
     ConfigAddMoreAppViewSet,
-    AppDetailViewSet,
-    ConfigDetailViewset,
-    ContactDetailViewSet,
+    OtpTimelineViewSet,
 )
 
 urlpatterns = [
     path("config/", ConfigViewSet.as_view({"get": "list", "post": "create"})),
     path(
         "config/detail/<int:pk>/",
-        ConfigDetailViewset.as_view(
+        ConfigViewSet.as_view(
             {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
         ),
     ),
@@ -21,7 +19,7 @@ urlpatterns = [
     path("contact/", ContactViewSet.as_view({"get": "list", "post": "create"})),
     path(
         "contact/detail/<int:pk>/",
-        ContactDetailViewSet.as_view(
+        ContactViewSet.as_view(
             {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
         ),
     ),
@@ -36,8 +34,18 @@ urlpatterns = [
     ),
     path(
         "app/detail/<int:pk>/",
-        AppDetailViewSet.as_view(
+        AppViewSet.as_view(
             {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
         ),
+    ),
+     path(
+        "otp-timeline/",
+        OtpTimelineViewSet.as_view({"get": "list", "post": "create"}),
+        name="otp-timeline",
+    ),
+     path(
+        "otp-timeline/detail/<pk>",
+        OtpTimelineViewSet.as_view({"get": "retrieve", "delete": "destroy"}),
+        name="otp-timeline",
     ),
 ]

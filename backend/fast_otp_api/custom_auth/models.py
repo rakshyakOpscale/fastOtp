@@ -64,6 +64,7 @@ class Otp(models.Model):
     expire_time = models.TimeField(blank=True, null=True)
     country_code = models.CharField(max_length=2, default="91")
     phone_number = models.CharField(max_length=10)
+    message = models.CharField(max_length=260)
 
     def __str__(self) -> str:
         return str(self.otp_code)
