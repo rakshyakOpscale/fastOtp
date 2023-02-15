@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-wp+gjyc2u(c4lq)w_#it7dk+m%5$)jy@2d^(woi7u*kb19w_h_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition
@@ -129,8 +129,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # custom
 from datetime import timedelta
-
 AUTH_USER_MODEL = "custom_auth.User"
+
+AUTHENTICATION_BACKENDS = [
+    'custom_auth.backends.CustomBackend',
+    'django.contrib.auth.backends.ModelBackend'
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
