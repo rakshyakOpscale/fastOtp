@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -129,17 +129,19 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # custom
 from datetime import timedelta
+
 AUTH_USER_MODEL = "custom_auth.User"
 
 AUTHENTICATION_BACKENDS = [
-    'custom_auth.backends.CustomBackend',
-    'django.contrib.auth.backends.ModelBackend'
+    "custom_auth.backends.CustomBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+    ),
 }
 
 SIMPLE_JWT = {
@@ -147,3 +149,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(minutes=30),
     "AUTH_HEADER_TYPES": ("Bearer"),
 }
+# Sms Configuration
+TWILIO_SID = os.environ.get("TWILIO_SID")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
+TWILIO_VERIFY_SID = os.environ.get("TWILIO_VERIFY_SID")

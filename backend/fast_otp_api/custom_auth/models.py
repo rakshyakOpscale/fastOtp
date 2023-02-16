@@ -8,11 +8,9 @@ from django.contrib.auth.models import (
 
 # Create your models here.
 class UserManager(BaseUserManager):
-    def _create(self, phone_number, password=None, **extra):
+    def _create(self, phone_number, **extra):
         user = self.model(phone_number=phone_number, **extra)
-        if password is None:
-            password = self.make_random_password()
-        user.set_password(password)
+        user.set_password(extra.get("password"))
         user.save()
         return user
 
@@ -31,7 +29,7 @@ class UserManager(BaseUserManager):
             raise ValueError("User must have a phone_number field")
 
         extra.setdefault("is_staff", True)
-        user = self._create(phone_number=phone_number, password=None, **extra)
+        user = self._create(phone_number=phone_number,**extra)
         return user
 
 

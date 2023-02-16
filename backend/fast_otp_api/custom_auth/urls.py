@@ -1,12 +1,25 @@
 from django.urls import path
 
 # relative path
-from .views import verify_otp_create_user, send_otp, login_user, log_out_user, UsersViewSet
+from .views import (
+    verify_otp_create_user,
+    send_otp,
+    login_user,
+    log_out_user,
+    UsersViewSet,
+    JwtTokenVerifyView,
+    SendOtpViewSet,
+    OtpVerifyViewSet,
+)
 
 urlpatterns = [
     path("users/", UsersViewSet.as_view({"get": "list"}), name="users"),
-    path("send-otp/", send_otp, name="send-otp"),
-    path("verify-otp/", verify_otp_create_user, name="verify-otp-create-user"),
-    path("login/<pk>",login_user, name="login"),
+    path("send-otp/", SendOtpViewSet.as_view({"post": "create"}), name="send-otp"),
+    path(
+        "verify-otp/",
+        OtpVerifyViewSet.as_view({"post": "create"}),
+        name="verify-otp-create-user",
+    ),
+    path("login/", JwtTokenVerifyView.as_view(), name="login"),
     path("logout/", log_out_user, name="logout"),
 ]

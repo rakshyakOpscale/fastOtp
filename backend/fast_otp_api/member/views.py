@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Config, Contact, App, OtpTimeline
 from .serializers import (

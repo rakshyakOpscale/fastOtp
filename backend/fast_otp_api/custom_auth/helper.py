@@ -1,7 +1,10 @@
+import random
+
+from django.http import HttpRequest
+from django.conf import settings
+
 from .models import Otp, User
 
-import random
-from django.http import HttpRequest
 
 
 # ///////////////////Third parth wrapper////////////////////////////
@@ -13,16 +16,15 @@ class SMSVerification:
     """A sms wrapper class to use 3rd parth sms service"""
 
     def __init__(self) -> None:
-        self.__account_sid = os.environ.get("TWILIO_SID")
-        self.__auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
-        self.__verify_sid = os.environ.get("TWILIO_VERIFY_SID")
+        self.__account_sid = settings.TWILIO_SID
+        self.__auth_token = settings.TWILIO_AUTH_TOKEN
+        self.__verify_sid = settings.TWILIO_VERIFY_SID
 
         self.__client = Client(self.__account_sid, self.__auth_token)
         pass
 
     def send_otp(self, phone_number: str) -> str:
         """accept to phone_number as string and return verification status"""
-        self.__verified_number = phone_number
         verification = self.__client.verify.v2.services(
             self.__verify_sid
         ).verifications.create(to=f"+91{phone_number}", channel="sms")
