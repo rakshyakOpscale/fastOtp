@@ -46,8 +46,9 @@ class SendOtpSerializer(serializers.Serializer):
 
 class OtpVerifySerializer(serializers.Serializer):
     """
-        Verify otp for the phone number and if the user not exist,
-        then take care of it by creating the user
+        1. Verify otp for the phone number and 
+        2. if the user not exist,creating the user
+        3. generate access and refresh token
     """
     phone_number = serializers.CharField()
     otp_code = serializers.CharField(write_only=True)
