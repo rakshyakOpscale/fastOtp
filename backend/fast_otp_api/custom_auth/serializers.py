@@ -28,6 +28,7 @@ class OTPSerializer(serializers.ModelSerializer):
 
 
 class SendOtpSerializer(serializers.Serializer):
+    """send otp to the phone number using Sms service"""
     phone_number = serializers.CharField()
     status = serializers.CharField(read_only=True)
     message = serializers.CharField(read_only=True)
