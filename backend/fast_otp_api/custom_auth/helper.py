@@ -8,7 +8,6 @@ from .models import Otp, User
 
 
 # ///////////////////Third parth wrapper////////////////////////////
-import os
 from twilio.rest import Client
 
 
