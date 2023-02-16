@@ -46,7 +46,7 @@ class SendOtpSerializer(serializers.Serializer):
 
 class OtpVerifySerializer(serializers.Serializer):
     """
-        1. Verify otp for the phone number and 
+        1. Verify otp for the phone number
         2. if the user not exist,creating the user
         3. generate access and refresh token
     """
