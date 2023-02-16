@@ -26,32 +26,32 @@ class OtpVerifyViewSet(viewsets.ModelViewSet):
     serializer_class = OtpVerifySerializer
 
 
-@api_view(["POST"])
-def send_otp(request):
-    """Send opt using Phone verification service"""
-    if not request.data.get("phone_number"):
-        return Response(
-            {"phone_number": ["This field is required"]},
-            status=restStatus.HTTP_400_BAD_REQUEST,
-        )
-    # otp_code = generte_otp(request.data.get("phone_number"))
-    smsVerification = SMSVerification()
-    status = smsVerification.send_otp(request.data.get("phone_number"))
-    return Response({"message": "otp sent to your phone number", "status": status})
+# @api_view(["POST"])
+# def send_otp(request):
+#     """Send opt using Phone verification service"""
+#     if not request.data.get("phone_number"):
+#         return Response(
+#             {"phone_number": ["This field is required"]},
+#             status=restStatus.HTTP_400_BAD_REQUEST,
+#         )
+#     # otp_code = generte_otp(request.data.get("phone_number"))
+#     smsVerification = SMSVerification()
+#     status = smsVerification.send_otp(request.data.get("phone_number"))
+#     return Response({"message": "otp sent to your phone number", "status": status})
 
-@api_view(["POST"])
-@permission_classes([permissions.AllowAny])
-def verify_otp_create_user(request):
-    """verify phone number with otp send through Phone verification service"""
-    serializer = OtpVerifySerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    return Response(serializer.data)
+# @api_view(["POST"])
+# @permission_classes([permissions.AllowAny])
+# def verify_otp_create_user(request):
+#     """verify phone number with otp send through Phone verification service"""
+#     serializer = OtpVerifySerializer(data=request.data)
+#     serializer.is_valid(raise_exception=True)
+#     return Response(serializer.data)
 
 
-@api_view(["GET", "POST"])
-def login_user(request):
-    # TODO:change pk to jwt access token
-    return Response({"detail": "jwt token"})
+# @api_view(["GET", "POST"])
+# def login_user(request):
+#     # TODO:change pk to jwt access token
+#     return Response({"detail": "jwt token"})
 
 
 @api_view(["GET"])

@@ -2,9 +2,6 @@ from django.urls import path
 
 # relative path
 from .views import (
-    verify_otp_create_user,
-    send_otp,
-    login_user,
     log_out_user,
     UsersViewSet,
     JwtTokenVerifyView,
