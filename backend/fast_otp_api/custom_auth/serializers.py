@@ -1,10 +1,5 @@
-import io
-
-from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
-from django.db.utils import IntegrityError
 from django.contrib.auth import login
-from django.http.request import HttpRequest
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken, UntypedToken
@@ -49,6 +44,10 @@ class SendOtpSerializer(serializers.Serializer):
 
 
 class OtpVerifySerializer(serializers.Serializer):
+    """
+        Verify otp for the phone number and if the user not exist,
+        then take care of it by creating the user
+    """
     phone_number = serializers.CharField()
     otp_code = serializers.CharField(write_only=True)
     status = serializers.CharField(read_only=True)
@@ -115,6 +114,7 @@ class OtpVerifySerializer(serializers.Serializer):
 
 
 class JwtTokenVerifySerializer(serializers.Serializer):
+    """Verify and login the user if the token is valid"""
     token = serializers.CharField()
 
     def validate_token(self, token):
