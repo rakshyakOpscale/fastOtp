@@ -1,15 +1,23 @@
+import io
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.db.utils import IntegrityError
-
+from django.contrib.auth import login
+from django.http.request import HttpRequest
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken, UntypedToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework.parsers import JSONParser
 
 from twilio.rest import TwilioException
 
 from .models import User, Otp
 from .helper import SMSVerification
+
+jwt_authentication = JWTAuthentication()
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -112,17 +120,15 @@ class JwtTokenVerifySerializer(serializers.Serializer):
     def validate_token(self, token):
         try:
             UntypedToken(token)
-        except Exception:
+        except TokenError:
             msg = "Token is invalid or expired"
             raise serializers.ValidationError(msg, code="token_not_valid")
 
         try:
-            AccessToken(token)
-        except Exception:
+            validated_token = AccessToken(token)
+            user = jwt_authentication.get_user(validated_token)
+            login(self.context["request"], user)
+        except TokenError:
             msg = "Token is not an access token"
-            raise serializers.ValidationError(msg, code="not_access_token")
+            raise serializers.ValidationError(msg, code="not_acces_token")
         return token
-
-    @classmethod
-    def get_token(cls, user):
-        return RefreshToken.for_user(user)

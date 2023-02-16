@@ -133,7 +133,6 @@ from datetime import timedelta
 AUTH_USER_MODEL = "custom_auth.User"
 
 AUTHENTICATION_BACKENDS = [
-    "custom_auth.backends.CustomBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -147,7 +146,8 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(minutes=30),
-    "AUTH_HEADER_TYPES": ("Bearer"),
+    "AUTH_HEADER_TYPES": "Bearer",
+    "USER_ID_CLAIM": "user_id",
 }
 # Sms Configuration
 TWILIO_SID = os.environ.get("TWILIO_SID")
