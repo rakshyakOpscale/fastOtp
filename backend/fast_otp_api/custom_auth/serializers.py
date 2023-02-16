@@ -39,9 +39,9 @@ class SendOtpSerializer(serializers.Serializer):
             validated_data["status"] = status
             validated_data["message"] = "Opt sent to your phone number"
             return {**validated_data}
-        except Exception:
-            msg = "Cannot create User"
-            raise serializers.ValidationError(msg, code="unique_user_constraint")
+        except TwilioException:
+            msg = "Sms service failed"
+            raise serializers.ValidationError(msg, code="failed_sms_service")
 
 
 class OtpVerifySerializer(serializers.Serializer):
