@@ -153,3 +153,9 @@ SIMPLE_JWT = {
 TWILIO_SID = os.environ.get("TWILIO_SID")
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 TWILIO_VERIFY_SID = os.environ.get("TWILIO_VERIFY_SID")
+
+
+if DEBUG:
+    HOST_NAME = "lochlhost"
+    PORT = "8000"
+    TEST_PHONE = "9772166609"

@@ -9,13 +9,15 @@ from .views import (
     OtpVerifyViewSet,
 )
 
+app_name = "custom_auth"
+
 urlpatterns = [
     path("users/", UsersViewSet.as_view({"get": "list"}), name="users"),
-    path("send-otp/", SendOtpViewSet.as_view({"post": "create"}), name="send-otp"),
+    path("send-otp/", SendOtpViewSet.as_view({"post": "create"}), name="send_otp"),
     path(
         "verify-otp/",
         OtpVerifyViewSet.as_view({"post": "create"}),
-        name="verify-otp-create-user",
+        name="verify_otp",
     ),
     path("login/", JwtTokenVerifyView.as_view(), name="login"),
     path("logout/", log_out_user, name="logout"),
