@@ -29,6 +29,7 @@ class OTPSerializer(serializers.ModelSerializer):
 
 class SendOtpSerializer(serializers.Serializer):
     """send otp to the phone number using Sms service"""
+
     phone_number = serializers.CharField()
     status = serializers.CharField(read_only=True)
     message = serializers.CharField(read_only=True)
@@ -50,6 +51,7 @@ class OtpVerifySerializer(serializers.Serializer):
     2. if the user not exist,create the user
     3. generate access and refresh token
     """
+
     phone_number = serializers.CharField()
     otp_code = serializers.CharField(write_only=True)
     status = serializers.CharField(read_only=True)
@@ -117,6 +119,7 @@ class OtpVerifySerializer(serializers.Serializer):
 
 class JwtTokenVerifySerializer(serializers.Serializer):
     """Verify and login the user if the token is valid"""
+
     token = serializers.CharField()
 
     def validate_token(self, token):
