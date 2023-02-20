@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 from user.models import Profile
 
@@ -9,6 +10,9 @@ class App(models.Model):
     display_name = models.CharField(max_length=120)
     package_name = models.CharField(max_length=260, unique=True)
     label = models.CharField(max_length=120)
+
+    def get_absolute_url(self):
+        return reverse("member:app-detail", args=[str(self.id)])  # type: ignore
 
     def __str__(self) -> str:
         return f"{self.display_name} {self.label}"
@@ -34,8 +38,11 @@ class Config(models.Model):
     created_on = models.DateTimeField(auto_now=True)
     last_update = models.DateField(auto_now_add=True)
 
+    def get_absolute_url(self):
+        return reverse("member:config-detail", args=[str(self.id)])  # type: ignore
+
     def __str__(self) -> str:
-        return self.profile.user_id.phone_number
+        return "%s" % (self.profile.user_id.phone_number)
 
 
 class OtpTimeline(models.Model):

@@ -5,12 +5,17 @@ from django.contrib.auth import logout
 from rest_framework import viewsets, status as restStatus, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenVerifyView
+from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 
 # relative path
 from .models import User
 from .helper import SMSVerification
-from .serializers import UserSerializer, JwtTokenVerifySerializer, SendOtpSerializer, OtpVerifySerializer
+from .serializers import (
+    UserSerializer,
+    JwtTokenVerifySerializer,
+    SendOtpSerializer,
+    OtpVerifySerializer,
+)
 
 # Create your views here.
 
@@ -19,6 +24,7 @@ class SendOtpViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     queryset = User.objects.all()
     serializer_class = SendOtpSerializer
+
 
 class OtpVerifyViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
@@ -71,6 +77,11 @@ class JwtTokenVerifyView(TokenVerifyView):
     serializer_class = JwtTokenVerifySerializer
 
 
+class JwtTokenRefreshView(TokenRefreshView):
+    pass
+
+
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    

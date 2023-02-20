@@ -5,6 +5,7 @@ from .views import (
     log_out_user,
     UsersViewSet,
     JwtTokenVerifyView,
+    JwtTokenRefreshView,
     SendOtpViewSet,
     OtpVerifyViewSet,
 )
@@ -20,5 +21,6 @@ urlpatterns = [
         name="verify_otp",
     ),
     path("login/", JwtTokenVerifyView.as_view(), name="login"),
+    path("token/refresh/", JwtTokenRefreshView.as_view(), name="refresh_token"),
     path("logout/", log_out_user, name="logout"),
 ]

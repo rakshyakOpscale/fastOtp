@@ -1,57 +1,130 @@
+import logging
+
 from django.test import TestCase
-from django.urls import reverse
-from django.contrib.auth import authenticate
-from django.db.utils import IntegrityError
+from django.conf import settings
+
+from custom_auth.models import User
 
 from .models import Config, Contact, App, Profile
 
-from custom_auth.models import User
 
 # Create your tests here.
 
 
-class MemberTest(TestCase):
+class AppModelTest(TestCase):
     def setUp(self) -> None:
-        for user in ["1234567891", "1234567892", "1234567893", "1234567894"]:
-            User.objects.create_user(user, password=user).save()
-
-        for app in ["amazone", "flipkart", "snapdeal"]:
-            App.objects.create(
-                display_name=app, package_name=f"com.package.{app}"
-            ).save()
-
-        for contact in ["1234567890", "1234567891", "1234567892"]:
-            Contact.objects.create(
-                phone_number=contact,
-                first_name="rahul",
-                last_name="sharma",
-                label="ecommarce",
-            ).save()
-
-        for user in [user for user in User.objects.all()]:
-            Profile.objects.create(user_id=user)
-
-    def test_user_model(self):
-        obj = User.objects.get(phone_number=1234567891)
-        self.assertIsInstance(obj, User)
-        self.assertEqual(obj.phone_number, str(1234567891))
-
-        response = self.client.get(reverse("custom_auth:users"))
-        self.assertEqual(response.status_code, 401)
-
-        response = self.client.get(
-            reverse("custom_auth:users"), HTTP_AUTHORIZATION="Bearer abc"
+        App.objects.create(
+            display_name="amazone",
+            package_name="com.package.amazone",
+            label="ecommarce",
         )
-        self.assertEqual(response.status_code, 401)
 
-    def test_user_authentication(self):
-        obj = authenticate(
-            phone_number=1234567891,
-            password="1234567891",
-            backend="django.contrib.auth.backends.ModelBackend",
+    logging.basicConfig(
+        filename="test.log",
+        level=logging.DEBUG,
+        format="ConfigModelTest:%(levelname)s:%(name)s:%(message)s",
+    )
+
+    def test_field_varbose_name(self):
+        app = App.objects.get(id=1)
+        display_name = app._meta.get_field("display_name").verbose_name
+        package_name = app._meta.get_field("package_name").verbose_name
+        label = app._meta.get_field("label").verbose_name
+
+        self.assertEqual(display_name, "display name")
+        self.assertEqual(package_name, "package name")
+        self.assertEqual(label, "label")
+
+    def test_field_max_length(self):
+        app = App.objects.get(id=1)
+        display_name_max_length = app._meta.get_field("display_name").max_length
+        package_name_max_length = app._meta.get_field("package_name").max_length
+        label_max_length = app._meta.get_field("label").max_length
+        self.assertEqual(display_name_max_length, 120)
+        self.assertEqual(package_name_max_length, 260)
+        self.assertEqual(label_max_length, 120)
+
+    def test_model_methods(self):
+        app = App.objects.get(id=1)
+        self.assertEqual(app.get_absolute_url(), "/api/member/app/detail/1/")
+
+    def test_obj_name(self):
+        app = App.objects.get(id=1)
+        expected_name = f"{app.display_name} {app.label}"
+        self.assertEqual(str(app), expected_name)
+
+
+class ContactModelTest(TestCase):
+    def setUp(self) -> None:
+        Contact.objects.create(
+            phone_number=settings.TEST_PHONE,
+            label="friend",
+            first_name="Rahul",
+            last_name="joshi",
         )
-        self.assertTrue(obj)
 
-    def test_profile_model(self):
-        profile = Profile.objects.all()
-        self.assertGreater(len(profile), 0)
+    def test_field_verbose_name(self):
+        contact = Contact.objects.get(id=1)
+        phone_number = contact._meta.get_field("phone_number").verbose_name
+        label = contact._meta.get_field("label").verbose_name
+        first_name = contact._meta.get_field("first_name").verbose_name
+        last_name = contact._meta.get_field("last_name").verbose_name
+
+        self.assertEqual(phone_number, "phone number")
+        self.assertEqual(label, "label")
+        self.assertEqual(first_name, "first name")
+        self.assertEqual(last_name, "last name")
+
+    def test_field_max_length(self):
+        contact = Contact.objects.get(id=1)
+        phone_number_max_len = contact._meta.get_field("phone_number").max_length
+        label_max_len = contact._meta.get_field("label").max_length
+        first_name_max_len = contact._meta.get_field("first_name").max_length
+        last_name_max_len = contact._meta.get_field("last_name").max_length
+
+        self.assertEqual(phone_number_max_len, 10)
+        self.assertEqual(label_max_len, 120)
+        self.assertEqual(first_name_max_len, 120)
+        self.assertEqual(last_name_max_len, 120)
+
+
+class ConfigModelTest(TestCase):
+    def setUp(self) -> None:
+        App.objects.create(
+            display_name="amazone",
+            package_name="com.package.amazone",
+            label="ecommarce",
+        )
+        Contact.objects.create(
+            phone_number=settings.TEST_PHONE,
+            label="brother",
+            first_name="Rohit",
+            last_name="Sharma",
+        )
+        User.objects.create(phone_number=settings.TEST_PHONE, is_verified=True)
+
+        user = User.objects.get(id=1)
+        app = App.objects.get(id=1)
+        contact = Contact.objects.get(id=1)
+
+        Profile.objects.create(user_id=user)
+        profile = Profile.objects.get(id=1)
+
+        Config.objects.create(profile=profile)
+
+    def test_field_verbose_name(self):
+        config = Config.objects.get(id=1)
+
+        profile = config._meta.get_field("profile").verbose_name
+        contact = config._meta.get_field("contact").verbose_name
+        selected_apps = config._meta.get_field("selected_apps").verbose_name
+        set_duration = config._meta.get_field("set_duration").verbose_name
+        created_on = config._meta.get_field("created_on").verbose_name
+        last_update = config._meta.get_field("last_update").verbose_name
+
+        self.assertEqual(profile, "profile")
+        self.assertEqual(contact, "contact")
+        self.assertEqual(selected_apps, "selected apps")
+        self.assertEqual(set_duration, "set duration")
+        self.assertEqual(created_on, "created on")
+        self.assertEqual(last_update, "last update")

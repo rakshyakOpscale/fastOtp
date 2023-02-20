@@ -5,7 +5,6 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken, UntypedToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework.parsers import JSONParser
 
 from twilio.rest import TwilioException
 
@@ -134,6 +133,6 @@ class JwtTokenVerifySerializer(serializers.Serializer):
             user = jwt_authentication.get_user(validated_token)
             login(self.context["request"], user)
         except TokenError:
-            msg = "Token is not an access token"
+            msg = "Not an access token"
             raise serializers.ValidationError(msg, code="not_acces_token")
         return token

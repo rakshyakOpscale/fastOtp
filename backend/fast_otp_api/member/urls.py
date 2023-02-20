@@ -7,6 +7,8 @@ from .views import (
     OtpTimelineViewSet,
 )
 
+app_name = "member"
+
 urlpatterns = [
     path("config/", ConfigViewSet.as_view({"get": "list", "post": "create"})),
     path(
@@ -31,21 +33,23 @@ urlpatterns = [
                 "post": "create",
             }
         ),
+        name="app-list"
     ),
     path(
         "app/detail/<int:pk>/",
         AppViewSet.as_view(
             {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
         ),
+        name="app-detail"
     ),
      path(
         "otp-timeline/",
         OtpTimelineViewSet.as_view({"get": "list", "post": "create"}),
-        name="otp-timeline",
+        name="otp-timeline-list",
     ),
      path(
         "otp-timeline/detail/<pk>",
         OtpTimelineViewSet.as_view({"get": "retrieve", "delete": "destroy"}),
-        name="otp-timeline",
+        name="otp-timeline-detail",
     ),
 ]
