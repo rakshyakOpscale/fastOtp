@@ -10,6 +10,7 @@ from twilio.rest import TwilioException
 
 from .models import User, Otp
 from .helper import SMSVerification
+from user.models import Profile
 
 jwt_authentication = JWTAuthentication()
 
@@ -64,7 +65,6 @@ class OtpVerifySerializer(serializers.Serializer):
             status = SMSVerification().verification_check(phone_number, otp_code)
             if status is False:
                 raise serializers.ValidationError
-            attrs.setdefault("status", status)
         except serializers.ValidationError:
             msg = {"otp_code": "Otp verification vailed"}
             raise serializers.ValidationError(msg, code="otp_code")
@@ -82,12 +82,18 @@ class OtpVerifySerializer(serializers.Serializer):
                 is_verified=True,
             )
             user.save()
+            Profile.objects.create(user=user).save()
+            attrs.setdefault("status", "created new user")
+            refresh, access = self.get_access_token(user)
+            attrs.setdefault("access", access)
+            attrs.setdefault("refresh", refresh)
         return attrs
 
     def create(self, validated_data):
         return {**validated_data}
 
-    def get_access_token(self, user) -> tuple:
+    def get_access_token(self, user:User) -> tuple:
+        """return tuple (refresh, access)"""
         refresh = RefreshToken().for_user(user)
         access = refresh.access_token
         return refresh, access

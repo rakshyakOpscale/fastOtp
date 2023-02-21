@@ -6,8 +6,7 @@ from custom_auth.models import User
 class Profile(models.Model):
     first_name = models.CharField(max_length=120, blank=True)
     last_name = models.CharField(max_length=120, blank=True)
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.user_id.phone_number
-
+        return self.user.phone_number
