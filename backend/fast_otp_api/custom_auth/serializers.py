@@ -70,6 +70,9 @@ class OtpVerifySerializer(serializers.Serializer):
             raise serializers.ValidationError(msg, code="otp_code")
         except TwilioException as e:
             print({"SMSVerification_error": e})
+            return serializers.ValidationError(
+                {"detail": "SMSservice failed", "message": e}
+            )
         try:
             user = User.objects.get(phone_number=phone_number)
             refresh, access = self.get_access_token(user)
@@ -83,7 +86,6 @@ class OtpVerifySerializer(serializers.Serializer):
             )
             user.save()
             Profile.objects.create(user=user).save()
-            attrs.setdefault("status", "created new user")
             refresh, access = self.get_access_token(user)
             attrs.setdefault("access", access)
             attrs.setdefault("refresh", refresh)
@@ -92,7 +94,7 @@ class OtpVerifySerializer(serializers.Serializer):
     def create(self, validated_data):
         return {**validated_data}
 
-    def get_access_token(self, user:User) -> tuple:
+    def get_access_token(self, user: User) -> tuple:
         """return tuple (refresh, access)"""
         refresh = RefreshToken().for_user(user)
         access = refresh.access_token
