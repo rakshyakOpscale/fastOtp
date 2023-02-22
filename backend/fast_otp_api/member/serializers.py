@@ -22,21 +22,28 @@ class AppListSerializer(serializers.ListSerializer):
 class ContactSerializer(ModelSerializer):
     class Meta:
         model = Contact
-        fields = ["id", "phone_number", "label", "first_name", "last_name"]
+        fields = ["id", "phone_number", "label", "first_name", "last_name", "profile"]
 
 
-class ConfigSerializer(serializers.ModelSerializer):
+class ConfigAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Config
-        fields = ["id", "set_duration", "profile", "contact", "selected_apps"]
+        fields = ["id", "set_duration", "profile", "selected_apps"]
 
+    profile = serializers.StringRelatedField()
     # contact = ContactSerializer()
-    # selected_apps = AppListSerializer()
+
+
+class ConfigUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Config
+        fields = ["id", "profile", "contact", "selected_apps", "set_duration"]
+
 
 class ConfigAddMoreAppSerializer(serializers.ModelSerializer):
     class Meta:
         model = Config
-        fields = ["id", "set_duration","profile","contact","selected_apps"]
+        fields = ["id", "set_duration", "profile", "contact", "selected_apps"]
         read_only_fields = ["contact", "profile", "set_duration"]
 
 

@@ -12,7 +12,4 @@ class ProfileSerializer(serializers.ModelSerializer):
             "last_name",
             "user_id",
         ]
-
-    # user_id = serializers.StringRelatedField()
-    user_id = serializers.StringRelatedField()
-
+        read_only_fields = ["user_id"]

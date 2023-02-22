@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 
 # relative path
 from .models import User
-from .helper import SMSVerification
+from .permissions import OnlySuperUser
 from .serializers import (
     UserSerializer,
     JwtTokenVerifySerializer,
@@ -82,6 +82,6 @@ class JwtTokenRefreshView(TokenRefreshView):
 
 
 class UsersViewSet(viewsets.ModelViewSet):
+    permission_classes = [OnlySuperUser]
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    

@@ -8,7 +8,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 
 from twilio.rest import TwilioException
 
-from .models import User, Otp
+from .models import User
 from .helper import SMSVerification
 from user.models import Profile
 
@@ -19,12 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "phone_number"]
-
-
-class OTPSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Otp
-        fields = ["otp_code", "expire_time", "phone_number"]
 
 
 class SendOtpSerializer(serializers.Serializer):
@@ -70,9 +64,6 @@ class OtpVerifySerializer(serializers.Serializer):
             raise serializers.ValidationError(msg, code="otp_code")
         except TwilioException as e:
             print({"SMSVerification_error": e})
-            return serializers.ValidationError(
-                {"detail": "SMSservice failed", "message": e}
-            )
         try:
             user = User.objects.get(phone_number=phone_number)
             refresh, access = self.get_access_token(user)

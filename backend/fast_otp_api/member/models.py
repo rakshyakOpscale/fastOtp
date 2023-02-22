@@ -19,6 +19,7 @@ class App(models.Model):
 
 
 class Contact(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=10, unique=True)
     label = models.CharField(max_length=120, default="family")
     first_name = models.CharField(max_length=120)
@@ -42,7 +43,7 @@ class Config(models.Model):
         return reverse("member:config-detail", args=[str(self.id)])  # type: ignore
 
     def __str__(self) -> str:
-        return "%s" % (self.profile.user_id.phone_number)
+        return "%s" % (self.profile.user.phone_number)
 
 
 class OtpTimeline(models.Model):

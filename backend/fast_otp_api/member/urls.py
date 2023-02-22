@@ -12,7 +12,7 @@ app_name = "member"
 urlpatterns = [
     path("config/", ConfigViewSet.as_view({"get": "list", "post": "create"})),
     path(
-        "config/detail/<int:pk>/",
+        "config-detail/<int:pk>/",
         ConfigViewSet.as_view(
             {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
         ),

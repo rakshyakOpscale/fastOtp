@@ -107,7 +107,7 @@ class ConfigModelTest(TestCase):
         app = App.objects.get(id=1)
         contact = Contact.objects.get(id=1)
 
-        Profile.objects.create(user_id=user)
+        Profile.objects.create(user=user)
         profile = Profile.objects.get(id=1)
 
         Config.objects.create(profile=profile)
