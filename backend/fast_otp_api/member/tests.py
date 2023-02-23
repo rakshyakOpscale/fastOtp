@@ -19,11 +19,9 @@ class AppModelTest(TestCase):
             label="ecommarce",
         )
 
-    logging.basicConfig(
-        filename="test.log",
-        level=logging.DEBUG,
-        format="ConfigModelTest:%(levelname)s:%(name)s:%(message)s",
-    )
+    def test_obj_str_name(self):
+        app = App.objects.get(id=1)
+        self.assertEqual(app.__str__(), f"{app.display_name} {app.label}")
 
     def test_field_varbose_name(self):
         app = App.objects.get(id=1)
@@ -56,12 +54,23 @@ class AppModelTest(TestCase):
 
 class ContactModelTest(TestCase):
     def setUp(self) -> None:
+        user = User.objects.create(
+            phone_number=settings.TEST_PHONE, password=settings.TEST_PHONE
+        )
+        Profile.objects.create(user=user, first_name="user", last_name="test")
+        profile = Profile.objects.get(id=1)
+
         Contact.objects.create(
+            profile=profile,
             phone_number=settings.TEST_PHONE,
             label="friend",
             first_name="Rahul",
             last_name="joshi",
         )
+
+    def test_obj_str_name(self):
+        contact = Contact.objects.get(id=1)
+        self.assertEqual(contact.__str__(), f"{contact.first_name} {contact.last_name}")
 
     def test_field_verbose_name(self):
         contact = Contact.objects.get(id=1)
@@ -90,27 +99,21 @@ class ContactModelTest(TestCase):
 
 class ConfigModelTest(TestCase):
     def setUp(self) -> None:
-        App.objects.create(
+        app = App.objects.create(
             display_name="amazone",
             package_name="com.package.amazone",
             label="ecommarce",
         )
-        Contact.objects.create(
-            phone_number=settings.TEST_PHONE,
-            label="brother",
-            first_name="Rohit",
-            last_name="Sharma",
+        user = User.objects.create(
+            phone_number=settings.TEST_PHONE, password=settings.TEST_PHONE
         )
-        User.objects.create(phone_number=settings.TEST_PHONE, is_verified=True)
+        profile = Profile.objects.create(user=user)
 
-        user = User.objects.get(id=1)
-        app = App.objects.get(id=1)
-        contact = Contact.objects.get(id=1)
-
-        Profile.objects.create(user=user)
-        profile = Profile.objects.get(id=1)
-
-        Config.objects.create(profile=profile)
+        Config.objects.create(profile=profile, set_duration="2h")
+    
+    def test_obj_str_name(self):
+        config = Config.objects.get(id=1)
+        self.assertEqual(config.__str__(), f"{config.profile.user.phone_number}")
 
     def test_field_verbose_name(self):
         config = Config.objects.get(id=1)

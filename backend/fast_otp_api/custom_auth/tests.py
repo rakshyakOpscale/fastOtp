@@ -1,13 +1,5 @@
-import io
-
 from django.test import TestCase
 from django.conf import settings
-from django.urls import reverse
-
-from django.contrib.auth import authenticate
-from django.db.utils import IntegrityError
-
-from rest_framework.parsers import JSONParser
 
 from .models import User
 
@@ -19,6 +11,10 @@ class UserTest(TestCase):
         User.objects.create_user(
             phone_number=settings.TEST_PHONE, password=settings.TEST_PHONE
         )
+    
+    def test_obj_str_name(self):
+        user = User.objects.get(id=1)
+        self.assertEqual(user.__str__(), user.phone_number)
 
     def test_field_verbose_name(self):
         user = User.objects.get(id=1)

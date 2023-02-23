@@ -11,6 +11,10 @@ class ProfileModelTest(TestCase):
         user = User.objects.create(phone_number=settings.TEST_PHONE)
         Profile.objects.create(user=user)
 
+    def test_obj_str_name(self):
+        profile = Profile.objects.get(id=1)
+        self.assertEqual(profile.__str__(), profile.user.phone_number)
+
     def test_field_verbose_name(self):
         profile = Profile.objects.get(id=1)
         first_name = profile._meta.get_field("first_name").verbose_name
