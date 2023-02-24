@@ -25,6 +25,7 @@ class ConfigViewSet(ModelViewSet):
 
     def get_queryset(self):
         from user.models import Profile
+
         if not self.request.user.is_superuser:  # type: ignore
             profile = get_object_or_404(Profile, user=self.request.user)
             return Config.objects.filter(profile=profile)
@@ -54,8 +55,13 @@ class ContactViewSet(ModelViewSet):
     serializer_class = ContactSerializer
 
     def get_queryset(self):
-        profile = Profile.objects.get(user=self.request.user)
-        return Contact.objects.filter(profile=profile)
+        try:
+            profile = Profile.objects.get(user=self.request.user)
+            return Contact.objects.filter(profile=profile)
+        except TypeError:
+            raise TypeError(
+                f"Got {self.request.user}, You need to login in as a user first."
+            )
 
 
 class OtpTimelineViewSet(ModelViewSet):

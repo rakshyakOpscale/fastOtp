@@ -25,6 +25,9 @@ class Contact(models.Model):
     first_name = models.CharField(max_length=120)
     last_name = models.CharField(max_length=120)
 
+    def get_absolute_url(self):
+        return reverse("member:contact-detail", args=[str(self.id)])  # type: ignore
+
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
